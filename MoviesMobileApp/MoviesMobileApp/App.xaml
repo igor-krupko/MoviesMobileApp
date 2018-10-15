@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<dryioc:PrismApplication xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dryioc="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
              x:Class="MoviesMobileApp.App">
-	<Application.Resources>
+	<dryioc:PrismApplication.Resources>
 
 		<!-- Application resource dictionary -->
 
-	</Application.Resources>
-</Application>
+	</dryioc:PrismApplication.Resources>
+</dryioc:PrismApplication>

@@ -1,29 +1,27 @@
-﻿using Xamarin.Forms;
+﻿using MoviesMobileApp.Pages;
+using MoviesMobileApp.ViewModels;
+using Prism;
+using Prism.DryIoc;
+using Prism.Ioc;
 
 namespace MoviesMobileApp
 {
-	public partial class App : Application
+	public partial class App : PrismApplication
 	{
-		public App ()
-		{
-			InitializeComponent();
+        public App(IPlatformInitializer initializer = null) : base(initializer) { }
 
-			MainPage = new Pages.MoviesListPage();
-		}
+        protected override async void OnInitialized()
+        {
+            InitializeComponent();
+            
+            await NavigationService.NavigateAsync($"{nameof(RootPage)}/{nameof(MoviesListPage)}");
+        }
 
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
-
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
-
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-	}
+        protected override void RegisterTypes(IContainerRegistry container)
+        {
+            container.RegisterForNavigation<RootPage>();
+            container.RegisterForNavigation<MoviesListPage, MoviesListPageViewModel>();
+            container.RegisterForNavigation<MovieDetailsPage, MovieDetailsPageViewModel>();
+        }
+    }
 }

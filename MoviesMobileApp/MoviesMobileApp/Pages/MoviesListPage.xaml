@@ -1,7 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MoviesMobileApp"
+             xmlns:views="clr-namespace:MoviesMobileApp.Views;assembly=MoviesMobileApp"
              x:Class="MoviesMobileApp.Pages.MoviesListPage">
+    <AbsoluteLayout>
+        <ActivityIndicator IsVisible="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
+                           IsRunning="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
+                           AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                           AbsoluteLayout.LayoutFlags="PositionProportional" />
 
+        <ContentView IsVisible="{Binding LoadingInfo.IsNoDataVisible}"
+                     AbsoluteLayout.LayoutBounds="0,0,1,1"
+                     AbsoluteLayout.LayoutFlags="All">
+            <views:PullToRefreshLayout VerticalOptions="FillAndExpand"
+                                       HorizontalOptions="FillAndExpand"
+                                       IsPullToRefreshEnabled="{Binding LoadingInfo.IsPullToRefreshEnabled}"
+                                       RefreshCommand="{Binding ReloadItemsCommand}"
+                                       RefreshColor="Blue"
+                                       IsRefreshing="{Binding LoadingInfo.IsRefreshing}">
+                <ScrollView VerticalOptions="FillAndExpand" />
+            </views:PullToRefreshLayout>
+        </ContentView>
+
+        <ContentView IsVisible="{Binding LoadingInfo.IsNoDataVisible}"
+                     Padding="15"
+                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                     AbsoluteLayout.LayoutFlags="PositionProportional">
+            <Label Text="No Items" />
+        </ContentView>
+
+        <views:ExtendedListView AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                AbsoluteLayout.LayoutFlags="All"
+                                IsVisible="{Binding LoadingInfo.IsDataVisible}"
+                                ItemsSource="{Binding Items}"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"
+                                HasUnevenRows="True"
+                                ItemTappedCommand="{Binding OnItemTappedCommand}"
+                                LoadMoreCommand="{Binding LoadMoreItemsCommand}"
+                                IsPullToRefreshEnabled="True"
+                                RefreshCommand="{Binding ReloadItemsCommand}"
+                                IsRefreshing="{Binding LoadingInfo.IsRefreshing}" >
+            <views:ExtendedListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label Text="{Binding Name}"/>
+                    </ViewCell>
+                </DataTemplate>
+            </views:ExtendedListView.ItemTemplate>
+        </views:ExtendedListView>
+
+        <ContentView Padding="15"
+                     AbsoluteLayout.LayoutBounds="0.5,1,1,-1"
+                     AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
+                     IsVisible="{Binding LoadingInfo.IsLoadingMore}"
+                     BackgroundColor="Transparent">
+            <ActivityIndicator IsRunning="True" 
+                               IsVisible="True" 
+                               HorizontalOptions="FillAndExpand" />
+        </ContentView>
+    </AbsoluteLayout>
 </ContentPage>
