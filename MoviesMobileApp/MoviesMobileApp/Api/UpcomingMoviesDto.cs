@@ -10,5 +10,8 @@ namespace MoviesMobileApp.Api
 
         [JsonProperty("total_results")]
         public int TotalResultsCount { get; set; }
+
+        [JsonProperty("total_pages")]
+        public int TotalPagesCount { get; set; }
     }
 }

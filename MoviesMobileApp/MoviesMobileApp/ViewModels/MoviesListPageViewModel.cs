@@ -12,8 +12,6 @@ namespace MoviesMobileApp.ViewModels
 {
     public class MoviesListPageViewModel : BindableBase, INavigatedAware
     {
-        private const int PageSize = 20;
-
         private readonly INavigationService navigationService;
         private readonly IMoviesService moviesService;
 
@@ -58,8 +56,8 @@ namespace MoviesMobileApp.ViewModels
         {
             LoadingInfo.StartRefreshing();
 
-            currentPageNumber = 0;
-            LoadItems(0, true);
+            currentPageNumber = 1;
+            LoadItems(1, true);
         }
 
         public void LoadMoreItems()
@@ -96,7 +94,7 @@ namespace MoviesMobileApp.ViewModels
 
             if (list != null)
             {
-                canLoadMore = list.Any() && list.Count % PageSize == 0;
+                canLoadMore = upcomingMoviesDto.TotalPagesCount != currentPageNumber;
 
                 Items = new ObservableCollection<MovieListItemViewModel>(list.Select(x => new MovieListItemViewModel
                 {

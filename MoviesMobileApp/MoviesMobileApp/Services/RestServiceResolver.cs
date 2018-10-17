@@ -24,7 +24,7 @@ namespace MoviesMobileApp.Services
         public RestServiceWrapper Background => GetServiceWrapper(ref backgroundWrapper, ref backgroundClient, new NativeMessageHandler());
         public RestServiceWrapper Speculative => GetServiceWrapper(ref speculativeWrapper, ref speculativeClient, new NativeMessageHandler());
 
-        public RestServiceResolver()
+        public RestServiceResolver(IConnectivity connectivity)
         {
             this.connectivity = connectivity;
         }
