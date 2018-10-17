@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using MoviesMobileApp.Api;
+using System.Reactive.Linq;
+using MoviesMobileApp.Api.Configuration;
+using MoviesMobileApp.Api.Movies;
 using MoviesMobileApp.Pages;
-using MoviesMobileApp.Services;
+using MoviesMobileApp.Services.Configuration;
+using MoviesMobileApp.Services.Movies;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -14,6 +17,7 @@ namespace MoviesMobileApp.ViewModels
     {
         private readonly INavigationService navigationService;
         private readonly IMoviesService moviesService;
+        private readonly IConfigurationService configurationService;
 
         private IDisposable itemsLoadingSubscription;
 
@@ -27,10 +31,12 @@ namespace MoviesMobileApp.ViewModels
         public DelegateCommand LoadMoreItemsCommand { get; }
 
         public MoviesListPageViewModel(INavigationService navigationService,
-            IMoviesService moviesService)
+            IMoviesService moviesService,
+            IConfigurationService configurationService)
         {
             this.navigationService = navigationService;
             this.moviesService = moviesService;
+            this.configurationService = configurationService;
 
             ReloadItemsCommand = new DelegateCommand(ReloadItems);
             OnItemTappedCommand = new DelegateCommand<MovieListItemViewModel>(OnItemTapped);
@@ -82,25 +88,27 @@ namespace MoviesMobileApp.ViewModels
         {
             itemsLoadingSubscription?.Dispose();
 
-            itemsLoadingSubscription = moviesService.GetUpcomingMovies(page)
+            itemsLoadingSubscription = configurationService.GetConfiguration()
+                .CombineLatest(moviesService.GetUpcomingMovies(page), (dto, moviesDto) => new Tuple<ConfigurationDto, UpcomingMoviesDto>(dto, moviesDto))
                 .Subscribe(
-                    items => OnItemsLoaded(items, reset),
+                    moviesInfo => OnMoviesInfoLoaded(moviesInfo, reset),
                     OnErrorLoadingItems);
         }
 
-        private void OnItemsLoaded(UpcomingMoviesDto upcomingMoviesDto, bool reset)
+        private void OnMoviesInfoLoaded(Tuple<ConfigurationDto, UpcomingMoviesDto> result, bool reset)
         {
-            var list = upcomingMoviesDto.UpcomingMovies?.ToList();
+            var movies = result.Item2.UpcomingMovies?.ToList();
 
-            if (list != null)
+            if (movies != null)
             {
-                canLoadMore = upcomingMoviesDto.TotalPagesCount != currentPageNumber;
+                canLoadMore = result.Item2.TotalPagesCount != currentPageNumber;
 
-                Items = new ObservableCollection<MovieListItemViewModel>(list.Select(x => new MovieListItemViewModel
+                Items = new ObservableCollection<MovieListItemViewModel>(movies.Select(x => new MovieListItemViewModel
                 {
                     Title = x.Title,
                     Overview = x.Overview,
-                    ReleaseDate = x.ReleaseDate
+                    ReleaseDate = x.ReleaseDate,
+                    PosterPath = result.Item1.ImagesConfiguration.ImageBaseUrl + "/" + result.Item1.ImagesConfiguration.PosterSizes.First() + "/" + x.PosterPath
                 }));
 
                 FinishLoading();

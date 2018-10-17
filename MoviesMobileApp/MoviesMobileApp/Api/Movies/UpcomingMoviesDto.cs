@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace MoviesMobileApp.Api
+namespace MoviesMobileApp.Api.Movies
 {
     public class UpcomingMoviesDto
     {

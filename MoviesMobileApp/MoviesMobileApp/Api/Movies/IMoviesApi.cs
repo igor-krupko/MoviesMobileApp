@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Refit;
 
-namespace MoviesMobileApp.Api
+namespace MoviesMobileApp.Api.Movies
 {
     public interface IMoviesApi
     {

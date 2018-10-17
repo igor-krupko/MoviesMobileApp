@@ -1,8 +1,8 @@
 ﻿using MoviesMobileApp.Pages;
 using MoviesMobileApp.Services;
+using MoviesMobileApp.Services.Configuration;
+using MoviesMobileApp.Services.Movies;
 using MoviesMobileApp.ViewModels;
-using Plugin.Connectivity;
-using Plugin.Connectivity.Abstractions;
 using Prism;
 using Prism.DryIoc;
 using Prism.Ioc;
@@ -24,6 +24,7 @@ namespace MoviesMobileApp
         {
             container.RegisterSingleton<IRestServiceResolver, RestServiceResolver>();
             container.RegisterSingleton<IMoviesService, MoviesService>();
+            container.RegisterSingleton<IConfigurationService, ConfigurationService>();
 
             container.RegisterForNavigation<RootPage>();
             container.RegisterForNavigation<MoviesListPage, MoviesListPageViewModel>();

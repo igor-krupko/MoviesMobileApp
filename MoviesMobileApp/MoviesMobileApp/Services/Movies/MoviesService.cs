@@ -1,8 +1,8 @@
 ﻿using System;
 using Akavache;
-using MoviesMobileApp.Api;
+using MoviesMobileApp.Api.Movies;
 
-namespace MoviesMobileApp.Services
+namespace MoviesMobileApp.Services.Movies
 {
     public class MoviesService : BaseService, IMoviesService
     {

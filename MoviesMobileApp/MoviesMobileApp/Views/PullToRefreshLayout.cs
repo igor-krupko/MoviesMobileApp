@@ -11,7 +11,6 @@ namespace MoviesMobileApp.Views
         public static readonly BindableProperty RefreshColorProperty = BindableProperty.Create(nameof(RefreshColor), typeof(Color), typeof(PullToRefreshLayout), Color.Default);
         public static readonly BindableProperty RefreshBackgroundColorProperty = BindableProperty.Create(nameof(RefreshBackgroundColor), typeof(Color), typeof(PullToRefreshLayout), Color.Default);
 
-
         public bool IsRefreshing
         {
             get => (bool)GetValue(IsRefreshingProperty);
