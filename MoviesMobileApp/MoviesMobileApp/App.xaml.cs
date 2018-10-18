@@ -1,4 +1,5 @@
-﻿using MoviesMobileApp.Pages;
+﻿using MoviesMobileApp.Mappers;
+using MoviesMobileApp.Pages;
 using MoviesMobileApp.Services;
 using MoviesMobileApp.Services.Configuration;
 using MoviesMobileApp.Services.Movies;
@@ -16,7 +17,9 @@ namespace MoviesMobileApp
         protected override async void OnInitialized()
         {
             InitializeComponent();
-            
+
+            MappingConfigurator.Configure();
+
             await NavigationService.NavigateAsync($"{nameof(RootPage)}/{nameof(MoviesListPage)}");
         }
 

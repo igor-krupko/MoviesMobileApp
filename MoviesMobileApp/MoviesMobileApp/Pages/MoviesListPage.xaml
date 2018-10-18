@@ -52,7 +52,7 @@
                                                         WidthRequest="100"
                                                         HeightRequest="100"
                                                         DownsampleToViewSize="true"
-                                                        Source="{Binding PosterPath}">
+                                                        Source="{Binding FullPosterPath}">
                                 <ffimageloading:CachedImage.Transformations>
                                     <transformations:CircleTransformation />
                                 </ffimageloading:CachedImage.Transformations>

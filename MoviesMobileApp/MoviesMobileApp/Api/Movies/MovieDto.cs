@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using MoviesMobileApp.Common;
 using Newtonsoft.Json;
 
 namespace MoviesMobileApp.Api.Movies
 {
-    public class MovieDto
+    public class MovieDto : IIdentifiable
     {
+        public object Identity => Id;
+
         [JsonProperty("id")]
         public int Id { get; set; }
 

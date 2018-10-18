@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using MoviesMobileApp.Api.Configuration;
@@ -7,6 +6,7 @@ using MoviesMobileApp.Api.Movies;
 using MoviesMobileApp.Pages;
 using MoviesMobileApp.Services.Configuration;
 using MoviesMobileApp.Services.Movies;
+using MoviesMobileApp.Utils;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -25,7 +25,7 @@ namespace MoviesMobileApp.ViewModels
         private bool canLoadMore = true;
 
         public LoadingInfo LoadingInfo { get; set; } = new LoadingInfo();
-        public ObservableCollection<MovieListItemViewModel> Items { get; set; }
+        public ExtendedObservableCollection<MovieListItemViewModel> Items { get; set; }
         public DelegateCommand ReloadItemsCommand { get; }
         public DelegateCommand<MovieListItemViewModel> OnItemTappedCommand { get; }
         public DelegateCommand LoadMoreItemsCommand { get; }
@@ -103,18 +103,24 @@ namespace MoviesMobileApp.ViewModels
             {
                 canLoadMore = result.Item2.TotalPagesCount != currentPageNumber;
 
-                Items = new ObservableCollection<MovieListItemViewModel>(movies.Select(x => new MovieListItemViewModel
+                if (reset || Items == null)
                 {
-                    Title = x.Title,
-                    Overview = x.Overview,
-                    ReleaseDate = x.ReleaseDate,
-                    PosterPath = result.Item1.ImagesConfiguration.ImageBaseUrl + "/" + result.Item1.ImagesConfiguration.PosterSizes.First() + "/" + x.PosterPath
-                }));
+                    Items = ObservableCollectionHelper.CreateFrom<MovieListItemViewModel>(movies, movie => SetBaseImagePath(result.Item1.ImagesConfiguration, movie));
+                }
+                else
+                {
+                    Items.UpdateFrom(movies, movie => SetBaseImagePath(result.Item1.ImagesConfiguration, movie));
+                }
 
                 FinishLoading();
             }
 
             LoadingInfo.HasDataToShow = Items != null && Items.Any();
+        }
+
+        private void SetBaseImagePath(ImagesConfigurationDto imagesConfiguration, MovieListItemViewModel movie)
+        {
+            movie.BaseImagePath = $"{imagesConfiguration.ImageBaseUrl}/{imagesConfiguration.PosterSizes.First()}";
         }
 
         private void FinishLoading()
