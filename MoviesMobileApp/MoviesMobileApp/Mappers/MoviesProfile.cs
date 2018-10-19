@@ -9,6 +9,7 @@ namespace MoviesMobileApp.Mappers
         public MoviesProfile()
         {
             CreateMap<MovieDto, MovieListItemViewModel>()
+                .ForMember(dest => dest.Genres, opts => opts.Ignore())
                 .ForMember(dest => dest.BaseImagePath, opts => opts.Ignore());
         }
     }

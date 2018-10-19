@@ -2,6 +2,7 @@
 using MoviesMobileApp.Pages;
 using MoviesMobileApp.Services;
 using MoviesMobileApp.Services.Configuration;
+using MoviesMobileApp.Services.Genres;
 using MoviesMobileApp.Services.Movies;
 using MoviesMobileApp.ViewModels;
 using Prism;
@@ -28,6 +29,7 @@ namespace MoviesMobileApp
             container.RegisterSingleton<IRestServiceResolver, RestServiceResolver>();
             container.RegisterSingleton<IMoviesService, MoviesService>();
             container.RegisterSingleton<IConfigurationService, ConfigurationService>();
+            container.RegisterSingleton<IGenresService, GenresService>();
 
             container.RegisterForNavigation<RootPage>();
             container.RegisterForNavigation<MoviesListPage, MoviesListPageViewModel>();

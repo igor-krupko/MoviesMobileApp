@@ -1,22 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using MoviesMobileApp.Api.Configuration;
+using MoviesMobileApp.Api.Genres;
 using MoviesMobileApp.Api.Movies;
 using MoviesMobileApp.Pages;
 using MoviesMobileApp.Services.Configuration;
+using MoviesMobileApp.Services.Genres;
 using MoviesMobileApp.Services.Movies;
 using MoviesMobileApp.Utils;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 
 namespace MoviesMobileApp.ViewModels
 {
-    public class MoviesListPageViewModel : BindableBase, INavigatedAware
+    public class MoviesListPageViewModel : BasePageViewModel
     {
         private readonly INavigationService navigationService;
         private readonly IMoviesService moviesService;
+        private readonly IGenresService genresService;
         private readonly IConfigurationService configurationService;
 
         private IDisposable itemsLoadingSubscription;
@@ -32,10 +35,12 @@ namespace MoviesMobileApp.ViewModels
 
         public MoviesListPageViewModel(INavigationService navigationService,
             IMoviesService moviesService,
+            IGenresService genresService,
             IConfigurationService configurationService)
         {
             this.navigationService = navigationService;
             this.moviesService = moviesService;
+            this.genresService = genresService;
             this.configurationService = configurationService;
 
             ReloadItemsCommand = new DelegateCommand(ReloadItems);
@@ -45,16 +50,24 @@ namespace MoviesMobileApp.ViewModels
 
         public async void OnItemTapped(MovieListItemViewModel item)
         {
-            await navigationService.NavigateAsync(nameof(MovieDetailsPage));
+            await navigationService.NavigateAsync(nameof(MovieDetailsPage),
+                new NavigationParameters
+                {
+                    { MovieDetailsPageViewModel.SelectedMovieKey, item }
+                });
         }
 
-        public void OnNavigatedFrom(NavigationParameters parameters)
+        public override void OnNavigatedFrom(NavigationParameters parameters)
         {
+            base.OnNavigatedFrom(parameters);
+
             itemsLoadingSubscription?.Dispose();
         }
 
-        public void OnNavigatedTo(NavigationParameters parameters)
+        public override void OnNavigatedTo(NavigationParameters parameters)
         {
+            base.OnNavigatedTo(parameters);
+
             ReloadItems();
         }
 
@@ -63,7 +76,7 @@ namespace MoviesMobileApp.ViewModels
             LoadingInfo.StartRefreshing();
 
             currentPageNumber = 1;
-            LoadItems(1, true);
+            LoadItems(currentPageNumber, true);
         }
 
         public void LoadMoreItems()
@@ -88,34 +101,49 @@ namespace MoviesMobileApp.ViewModels
         {
             itemsLoadingSubscription?.Dispose();
 
-            itemsLoadingSubscription = configurationService.GetConfiguration()
-                .CombineLatest(moviesService.GetUpcomingMovies(page), (dto, moviesDto) => new Tuple<ConfigurationDto, UpcomingMoviesDto>(dto, moviesDto))
+            var getConfigurationObservable = configurationService.GetConfiguration();
+            var getGenresObservable = genresService.GetGenres();
+            var getMoviesObservable = moviesService.GetUpcomingMovies(page);
+
+            itemsLoadingSubscription = getConfigurationObservable.CombineLatest(getGenresObservable, getMoviesObservable,
+                    (configurationDto, genresDto, moviesDto) => new MoviesListPageData(configurationDto, genresDto, moviesDto))
                 .Subscribe(
-                    moviesInfo => OnMoviesInfoLoaded(moviesInfo, reset),
+                    loadedResult => OnMoviesInfoLoaded(loadedResult, reset),
                     OnErrorLoadingItems);
         }
 
-        private void OnMoviesInfoLoaded(Tuple<ConfigurationDto, UpcomingMoviesDto> result, bool reset)
+        private void OnMoviesInfoLoaded(MoviesListPageData loadedResult, bool reset)
         {
-            var movies = result.Item2.UpcomingMovies?.ToList();
+            var movies = loadedResult.Movies?.ToList();
 
             if (movies != null)
             {
-                canLoadMore = result.Item2.TotalPagesCount != currentPageNumber;
+                canLoadMore = loadedResult.TotalPagesCount != currentPageNumber;
 
                 if (reset || Items == null)
                 {
-                    Items = ObservableCollectionHelper.CreateFrom<MovieListItemViewModel>(movies, movie => SetBaseImagePath(result.Item1.ImagesConfiguration, movie));
+                    Items = ObservableCollectionHelper.CreateFrom<MovieListItemViewModel>(movies, movie => PrepareMovieItemViewModel(loadedResult, movie));
                 }
                 else
                 {
-                    Items.UpdateFrom(movies, movie => SetBaseImagePath(result.Item1.ImagesConfiguration, movie));
+                    Items.UpdateFrom(movies, movie => PrepareMovieItemViewModel(loadedResult, movie));
                 }
 
                 FinishLoading();
             }
 
             LoadingInfo.HasDataToShow = Items != null && Items.Any();
+        }
+
+        private void PrepareMovieItemViewModel(MoviesListPageData loadedResult, MovieListItemViewModel movie)
+        {
+            SetGenres(loadedResult.Genres, movie);
+            SetBaseImagePath(loadedResult.ImagesConfiguration, movie);
+        }
+
+        private void SetGenres(IEnumerable<GenreDto> genres, MovieListItemViewModel movie)
+        {
+            movie.Genres = string.Join(", ", movie.GenreIds.Select(id => genres.FirstOrDefault(genre => genre.Id == id)?.Name));
         }
 
         private void SetBaseImagePath(ImagesConfigurationDto imagesConfiguration, MovieListItemViewModel movie)
@@ -126,6 +154,25 @@ namespace MoviesMobileApp.ViewModels
         private void FinishLoading()
         {
             LoadingInfo.FinishLoading();
+        }
+
+        private class MoviesListPageData
+        {
+            public ImagesConfigurationDto ImagesConfiguration { get; }
+            public IEnumerable<GenreDto> Genres { get; }
+            public IEnumerable<MovieDto> Movies { get; }
+            public int TotalPagesCount { get; }
+
+            public MoviesListPageData(
+                ConfigurationDto configurationDto,
+                GenresListDto genresListDto,
+                UpcomingMoviesDto upcomingMoviesDto)
+            {
+                ImagesConfiguration = configurationDto.ImagesConfiguration;
+                Genres = genresListDto.Genres;
+                Movies = upcomingMoviesDto.UpcomingMovies;
+                TotalPagesCount = upcomingMoviesDto.TotalPagesCount;
+            }
         }
     }
 }

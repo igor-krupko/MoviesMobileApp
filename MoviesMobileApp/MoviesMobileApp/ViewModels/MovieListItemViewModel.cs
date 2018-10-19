@@ -13,6 +13,8 @@ namespace MoviesMobileApp.ViewModels
         public string Title { get; set; }
         
         public DateTime ReleaseDate { get; set; }
+
+        public string Genres { get; set; }
         
         public IEnumerable<int> GenreIds { get; set; }
         

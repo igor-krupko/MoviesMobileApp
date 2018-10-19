@@ -2,9 +2,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:dryioc="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
              x:Class="MoviesMobileApp.App">
-	<dryioc:PrismApplication.Resources>
+    <dryioc:PrismApplication.Resources>
+        <ResourceDictionary>
+            <!--  Text Sizes  -->
+            <x:Double x:Key="DefaultTextFontSize">16</x:Double>
+            <x:Double x:Key="TitleTextFontSize">24</x:Double>
 
-		<!-- Application resource dictionary -->
+            <!--  Colors  -->
+            <Color x:Key="DefaultTextColor">DimGray</Color>
+            <Color x:Key="TitleTextColor">Black</Color>
+            <Color x:Key="PageBackgroundColor">White</Color>
 
-	</dryioc:PrismApplication.Resources>
+            <!-- Styles -->
+            <Style x:Key="BasePageStyle" TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="{StaticResource PageBackgroundColor}" />
+                <Setter Property="Padding" Value="10" />
+            </Style>
+
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{StaticResource DefaultTextFontSize}" />
+                <Setter Property="TextColor" Value="{StaticResource DefaultTextColor}" />
+            </Style>
+            <Style x:Key="TitleLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{StaticResource TitleTextFontSize}" />
+                <Setter Property="TextColor" Value="{StaticResource TitleTextColor}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+        </ResourceDictionary>
+    </dryioc:PrismApplication.Resources>
 </dryioc:PrismApplication>
