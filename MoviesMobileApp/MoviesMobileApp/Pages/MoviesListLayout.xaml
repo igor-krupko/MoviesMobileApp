@@ -1,0 +1,78 @@
+﻿<AbsoluteLayout xmlns="http://xamarin.com/schemas/2014/forms" 
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:views="clr-namespace:MoviesMobileApp.Views;assembly=MoviesMobileApp"
+                xmlns:resources="clr-namespace:MoviesMobileApp.Resources;assembly=MoviesMobileApp"
+                xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                x:Class="MoviesMobileApp.Pages.MoviesListLayout">
+    <ActivityIndicator IsVisible="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
+                       IsRunning="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
+                       AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                       AbsoluteLayout.LayoutFlags="PositionProportional" />
+
+    <ContentView IsVisible="{Binding LoadingInfo.IsNoDataVisible}"
+                 AbsoluteLayout.LayoutBounds="0,0,1,1"
+                 AbsoluteLayout.LayoutFlags="All">
+        <views:PullToRefreshLayout VerticalOptions="FillAndExpand"
+                                   HorizontalOptions="FillAndExpand"
+                                   IsPullToRefreshEnabled="{Binding LoadingInfo.IsPullToRefreshEnabled}"
+                                   RefreshCommand="{Binding ReloadItemsCommand}"
+                                   IsRefreshing="{Binding LoadingInfo.IsRefreshing}">
+            <ScrollView VerticalOptions="FillAndExpand" />
+        </views:PullToRefreshLayout>
+    </ContentView>
+
+    <ContentView IsVisible="{Binding LoadingInfo.IsNoDataVisible}"
+                 Padding="15"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                 AbsoluteLayout.LayoutFlags="PositionProportional">
+        <Label Text="{x:Static resources:Strings.NoMoviesLabel}" />
+    </ContentView>
+
+    <views:ExtendedListView AbsoluteLayout.LayoutBounds="0,0,1,1"
+                            AbsoluteLayout.LayoutFlags="All"
+                            IsVisible="{Binding LoadingInfo.IsDataVisible}"
+                            ItemsSource="{Binding Items}"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
+                            HasUnevenRows="True"
+                            ItemTappedCommand="{Binding OnItemTappedCommand}"
+                            LoadMoreCommand="{Binding LoadMoreItemsCommand}"
+                            IsPullToRefreshEnabled="True"
+                            RefreshCommand="{Binding ReloadItemsCommand}"
+                            IsRefreshing="{Binding LoadingInfo.IsRefreshing}" >
+        <views:ExtendedListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal" 
+                                 Padding="0, 10, 0, 10">
+                        <forms:CachedImage HorizontalOptions="Center" 
+                                           VerticalOptions="Center"
+                                           WidthRequest="80"
+                                           HeightRequest="120"
+                                           DownsampleToViewSize="True"
+                                           Source="{Binding FullPosterPath}">
+                        </forms:CachedImage>
+                        <StackLayout Orientation="Vertical">
+                            <Label Text="{Binding Title}" 
+                                   Style="{StaticResource TitleLabelStyle}"/>
+                            <Label Text="{Binding Genres}" 
+                                   Style="{StaticResource ItalicLabelStyle}"/>
+                            <Label Text="{Binding ReleaseDate, StringFormat={x:Static resources:Strings.ReleaseDateLabelFormat}}"
+                                   Style="{StaticResource LabelStyle}"/>
+                        </StackLayout>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </views:ExtendedListView.ItemTemplate>
+    </views:ExtendedListView>
+
+    <ContentView Padding="15"
+                 AbsoluteLayout.LayoutBounds="0.5,1,1,-1"
+                 AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
+                 IsVisible="{Binding LoadingInfo.IsLoadingMore}"
+                 BackgroundColor="Transparent">
+        <ActivityIndicator IsRunning="True" 
+                           IsVisible="True" 
+                           HorizontalOptions="FillAndExpand" />
+    </ContentView>
+</AbsoluteLayout>

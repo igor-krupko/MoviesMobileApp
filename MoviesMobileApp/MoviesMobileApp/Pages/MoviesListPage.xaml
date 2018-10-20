@@ -1,82 +1,13 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:MoviesMobileApp.Views;assembly=MoviesMobileApp"
-             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:resources="clr-namespace:MoviesMobileApp.Resources;assembly=MoviesMobileApp"
+             xmlns:pages="clr-namespace:MoviesMobileApp.Pages;assembly=MoviesMobileApp"
              x:Class="MoviesMobileApp.Pages.MoviesListPage"
              Title="{x:Static resources:Strings.UpcomingMoviesPageTitle}"
-             Style ="{StaticResource BasePageStyle}">
-    <AbsoluteLayout>
-        <ActivityIndicator IsVisible="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
-                           IsRunning="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
-                           AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-                           AbsoluteLayout.LayoutFlags="PositionProportional" />
-
-        <ContentView IsVisible="{Binding LoadingInfo.IsNoDataVisible}"
-                     AbsoluteLayout.LayoutBounds="0,0,1,1"
-                     AbsoluteLayout.LayoutFlags="All">
-            <views:PullToRefreshLayout VerticalOptions="FillAndExpand"
-                                       HorizontalOptions="FillAndExpand"
-                                       IsPullToRefreshEnabled="{Binding LoadingInfo.IsPullToRefreshEnabled}"
-                                       RefreshCommand="{Binding ReloadItemsCommand}"
-                                       RefreshColor="Blue"
-                                       IsRefreshing="{Binding LoadingInfo.IsRefreshing}">
-                <ScrollView VerticalOptions="FillAndExpand" />
-            </views:PullToRefreshLayout>
-        </ContentView>
-
-        <ContentView IsVisible="{Binding LoadingInfo.IsNoDataVisible}"
-                     Padding="15"
-                     AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-                     AbsoluteLayout.LayoutFlags="PositionProportional">
-            <Label Text="{x:Static resources:Strings.NoMoviesLabel}" />
-        </ContentView>
-
-        <views:ExtendedListView AbsoluteLayout.LayoutBounds="0,0,1,1"
-                                AbsoluteLayout.LayoutFlags="All"
-                                IsVisible="{Binding LoadingInfo.IsDataVisible}"
-                                ItemsSource="{Binding Items}"
-                                HorizontalOptions="FillAndExpand"
-                                VerticalOptions="FillAndExpand"
-                                HasUnevenRows="True"
-                                ItemTappedCommand="{Binding OnItemTappedCommand}"
-                                LoadMoreCommand="{Binding LoadMoreItemsCommand}"
-                                IsPullToRefreshEnabled="True"
-                                RefreshCommand="{Binding ReloadItemsCommand}"
-                                IsRefreshing="{Binding LoadingInfo.IsRefreshing}" >
-            <views:ExtendedListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Orientation="Horizontal">
-                            <ffimageloading:CachedImage HorizontalOptions="Center" 
-                                                        VerticalOptions="Center"
-                                                        WidthRequest="80"
-                                                        HeightRequest="120"
-                                                        DownsampleToViewSize="True"
-                                                        Source="{Binding FullPosterPath}">
-                            </ffimageloading:CachedImage>
-                            <StackLayout Orientation="Vertical">
-                                <Label Text="{Binding Title}" 
-                                       Style="{StaticResource TitleLabelStyle}"/>
-                                <Label Text="{Binding Genres, StringFormat={x:Static resources:Strings.GenresLabelFormat}}" 
-                                       Style="{StaticResource LabelStyle}"/>
-                                <Label Text="{Binding ReleaseDate, StringFormat={x:Static resources:Strings.ReleaseDateLabelFormat}}"
-                                       Style="{StaticResource LabelStyle}"/>
-                            </StackLayout>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </views:ExtendedListView.ItemTemplate>
-        </views:ExtendedListView>
-
-        <ContentView Padding="15"
-                     AbsoluteLayout.LayoutBounds="0.5,1,1,-1"
-                     AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
-                     IsVisible="{Binding LoadingInfo.IsLoadingMore}"
-                     BackgroundColor="Transparent">
-            <ActivityIndicator IsRunning="True" 
-                               IsVisible="True" 
-                               HorizontalOptions="FillAndExpand" />
-        </ContentView>
-    </AbsoluteLayout>
+             Style="{StaticResource BasePageStyle}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="ic_search" 
+                     Command="{Binding OpenSearchCommand}" />
+    </ContentPage.ToolbarItems>
+    <pages:MoviesListLayout />
 </ContentPage>

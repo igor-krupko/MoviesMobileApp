@@ -5,6 +5,8 @@ namespace MoviesMobileApp.Services.Movies
 {
     public interface IMoviesService
     {
-        IObservable<UpcomingMoviesDto> GetUpcomingMovies(int pageNumber);
+        IObservable<MoviesDto> GetUpcomingMovies(int pageNumber);
+
+        IObservable<MoviesDto> SearchMovies(int pageNumber, string query);
     }
 }

@@ -24,6 +24,9 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\SearchMoviesListPage.xaml.cs">
+      <DependentUpon>SearchMoviesListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Pages\MoviesListPage.xaml.cs">
       <DependentUpon>MoviesListPage.xaml</DependentUpon>
     </Compile>
@@ -38,6 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Pages\MoviesListLayout.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>

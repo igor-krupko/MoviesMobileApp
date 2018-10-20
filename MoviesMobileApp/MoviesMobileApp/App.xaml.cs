@@ -33,6 +33,7 @@ namespace MoviesMobileApp
 
             container.RegisterForNavigation<RootPage>();
             container.RegisterForNavigation<MoviesListPage, MoviesListPageViewModel>();
+            container.RegisterForNavigation<SearchMoviesListPage, SearchMoviesListPageViewModel>();
             container.RegisterForNavigation<MovieDetailsPage, MovieDetailsPageViewModel>();
         }
     }

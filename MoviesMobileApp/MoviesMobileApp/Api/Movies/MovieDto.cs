@@ -16,7 +16,7 @@ namespace MoviesMobileApp.Api.Movies
         public string Title { get; set; }
 
         [JsonProperty("release_date")]
-        public DateTime ReleaseDate{ get; set; }
+        public DateTime? ReleaseDate{ get; set; }
 
         [JsonProperty("genre_ids")]
         public IEnumerable<int> GenreIds { get; set; }

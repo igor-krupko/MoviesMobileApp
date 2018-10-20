@@ -117,11 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GenresLabelFormat" xml:space="preserve">
-    <value>Genres: {0}</value>
+  <data name="MovieSearchPlaceholder" xml:space="preserve">
+    <value>Enter movie name to search</value>
   </data>
   <data name="NoMoviesLabel" xml:space="preserve">
     <value>No upcoming movies</value>
+  </data>
+  <data name="OverviewLabel" xml:space="preserve">
+    <value>Overview</value>
   </data>
   <data name="ReleaseDateLabelFormat" xml:space="preserve">
     <value>Release date: {0:dd MMMM yyyy}</value>

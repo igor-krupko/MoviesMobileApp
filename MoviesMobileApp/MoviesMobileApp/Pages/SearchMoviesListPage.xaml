@@ -1,0 +1,15 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:resources="clr-namespace:MoviesMobileApp.Resources;assembly=MoviesMobileApp"
+             xmlns:pages="clr-namespace:MoviesMobileApp.Pages;assembly=MoviesMobileApp"
+             x:Class="MoviesMobileApp.Pages.SearchMoviesListPage"
+             NavigationPage.HasNavigationBar="False"
+             Style ="{StaticResource BasePageStyle}">
+    <StackLayout Orientation="Vertical">
+        <SearchBar x:Name="SearchBar"
+                   Placeholder="{x:Static resources:Strings.MovieSearchPlaceholder}"
+                   SearchCommand="{Binding SearchCommand}"
+                   SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
+        <pages:MoviesListLayout />
+    </StackLayout>
+</ContentPage>

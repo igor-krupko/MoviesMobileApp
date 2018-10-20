@@ -1,15 +1,28 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:resources="clr-namespace:MoviesMobileApp.Resources;assembly=MoviesMobileApp"
              x:Class="MoviesMobileApp.Pages.MovieDetailsPage"
              Title ="{Binding Movie.Title}"
              Style ="{StaticResource BasePageStyle}">
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical">
-            <forms:CachedImage Source="{Binding Movie.FullPosterPath}" />
-            <Label Text="{Binding Movie.Title}"/>
-            <Label Text="{Binding Movie.Genres}"/>
-            <Label Text="{Binding Movie.Overview}"/>
+        <StackLayout Orientation="Vertical" Spacing="10">
+            <StackLayout Orientation="Horizontal">
+                <forms:CachedImage Source="{Binding Movie.FullPosterPath}"
+                                   WidthRequest="80"
+                                   HeightRequest="120"
+                                   DownsampleToViewSize="True" />
+                <StackLayout Orientation="Vertical">
+                    <Label Text="{Binding Movie.Genres}"
+                           Style="{StaticResource ItalicLabelStyle}"/>
+                    <Label Text="{Binding Movie.ReleaseDate, StringFormat={x:Static resources:Strings.ReleaseDateLabelFormat}}"
+                           Style="{StaticResource LabelStyle}"/>
+                </StackLayout>
+            </StackLayout>
+            <Label Text="{x:Static resources:Strings.OverviewLabel}"
+                   Style="{StaticResource TitleLabelStyle}" />
+            <Label Text="{Binding Movie.Overview}" 
+                   Style="{StaticResource LabelStyle}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
