@@ -6,7 +6,7 @@ using Android.OS;
 
 namespace MoviesMobileApp.Droid
 {
-    [Activity(Label = "MoviesMobileApp", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Movies Mobile", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private readonly CultureInfo defaultCulture = new CultureInfo("en-US");
@@ -19,10 +19,11 @@ namespace MoviesMobileApp.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
 
             var app = new App(new AndroidInitializer());
             LoadApplication(app);
+
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
         }
 
         protected override void OnResume()

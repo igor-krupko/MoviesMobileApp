@@ -6,7 +6,7 @@
     <dryioc:PrismApplication.Resources>
         <ResourceDictionary>
             <!--  Text Sizes  -->
-            <x:Double x:Key="DefaultTextFontSize">15</x:Double>
+            <x:Double x:Key="DefaultTextFontSize">16</x:Double>
             <x:Double x:Key="TitleTextFontSize">20</x:Double>
 
             <!--  Colors  -->

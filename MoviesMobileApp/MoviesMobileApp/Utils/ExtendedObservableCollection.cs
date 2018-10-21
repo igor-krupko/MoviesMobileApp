@@ -138,25 +138,12 @@ namespace MoviesMobileApp.Utils
             }
         }
 
-        public void Move(int oldIndex, int newIndex)
-        {
-            MoveItem(oldIndex, newIndex);
-        }
-
         public ExtendedObservableCollection<T> DelayNotifications()
         {
             return new ExtendedObservableCollection<T>((null == notifyInfo)
                     ? this
                     : notifyInfo.RootCollection,
                 true);
-        }
-
-        public ExtendedObservableCollection<T> DisableNotifications()
-        {
-            return new ExtendedObservableCollection<T>(notifyInfo == null
-                    ? this
-                    : notifyInfo.RootCollection,
-                false);
         }
 
         protected override void ClearItems()
@@ -202,21 +189,6 @@ namespace MoviesMobileApp.Utils
                 originalItem,
                 item,
                 index));
-        }
-
-        private void MoveItem(int oldIndex, int newIndex)
-        {
-            CheckReentrancy();
-
-            var removedItem = this[oldIndex];
-            base.RemoveItem(oldIndex);
-            base.InsertItem(newIndex, removedItem);
-
-            fireIndexerChanged();
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move,
-                removedItem,
-                newIndex,
-                oldIndex));
         }
 
         private void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
@@ -298,6 +270,10 @@ namespace MoviesMobileApp.Utils
                 return (sender, args) =>
                 {
                     var wrapper = sender as ExtendedObservableCollection<T>;
+                    if (wrapper == null)
+                    {
+                        return;
+                    }
                     action = args.Action;
 
                     switch (action)

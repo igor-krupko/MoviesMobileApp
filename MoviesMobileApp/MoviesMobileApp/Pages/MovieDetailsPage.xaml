@@ -6,39 +6,41 @@
              Title ="{Binding Movie.Title}"
              Style ="{StaticResource BasePageStyle}">
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" 
-                     Style="{StaticResource StackLayoutBaseStyle}">
-            <StackLayout Orientation="Horizontal"
+        <ScrollView>
+            <StackLayout Orientation="Vertical"
                          Style="{StaticResource StackLayoutBaseStyle}">
-                <forms:CachedImage Source="{Binding Movie.MediumQualityPosterPath}"
-                                   Style="{StaticResource ImageMediumSizeStyle}" />
-
-                <StackLayout Orientation="Vertical"
-                             VerticalOptions="EndAndExpand"
+                <StackLayout Orientation="Horizontal"
                              Style="{StaticResource StackLayoutBaseStyle}">
-                    <Label IsVisible="{Binding Movie.HasGenres}"
-                           Text="{Binding Movie.Genres}"
-                           Style="{StaticResource ItalicLabelStyle}"/>
+                    <forms:CachedImage Source="{Binding Movie.MediumQualityPosterPath}"
+                                       Style="{StaticResource ImageMediumSizeStyle}" />
 
-                    <StackLayout Orientation="Horizontal"
-                                 IsVisible="{Binding Movie.HasReleaseDate}">
-                        <Label Text="{x:Static resources:Strings.ReleaseDateLabel}"
-                               Style="{StaticResource LabelStyle}"/>
+                    <StackLayout Orientation="Vertical"
+                                 VerticalOptions="EndAndExpand"
+                                 Style="{StaticResource StackLayoutBaseStyle}">
+                        <Label IsVisible="{Binding Movie.HasGenres}"
+                               Text="{Binding Movie.Genres}"
+                               Style="{StaticResource ItalicLabelStyle}"/>
 
-                        <Label Text="{Binding Movie.ReleaseDate, StringFormat='{0:dd MMMM yyyy}'}"
-                               Style="{StaticResource ColorLabelStyle}"/>
+                        <StackLayout Orientation="Horizontal"
+                                     IsVisible="{Binding Movie.HasReleaseDate}">
+                            <Label Text="{x:Static resources:Strings.ReleaseDateLabel}"
+                                   Style="{StaticResource LabelStyle}"/>
+
+                            <Label Text="{Binding Movie.ReleaseDate, StringFormat='{0:dd MMMM yyyy}'}"
+                                   Style="{StaticResource ColorLabelStyle}"/>
+                        </StackLayout>
                     </StackLayout>
                 </StackLayout>
+
+                <BoxView HorizontalOptions="FillAndExpand"
+                         Style="{StaticResource LineStyle}" />
+
+                <Label Text="{x:Static resources:Strings.OverviewLabel}"
+                       Style="{StaticResource TitleLabelStyle}" />
+
+                <Label Text="{Binding Movie.Overview}" 
+                       Style="{StaticResource ItalicLabelStyle}" />
             </StackLayout>
-
-            <BoxView HorizontalOptions="FillAndExpand"
-                     Style="{StaticResource LineStyle}" />
-
-            <Label Text="{x:Static resources:Strings.OverviewLabel}"
-                   Style="{StaticResource TitleLabelStyle}" />
-
-            <Label Text="{Binding Movie.Overview}" 
-                   Style="{StaticResource ItalicLabelStyle}" />
-        </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

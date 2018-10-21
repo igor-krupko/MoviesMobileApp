@@ -8,7 +8,9 @@ using MoviesMobileApp.ViewModels;
 using Prism;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Xamarin.Forms.Xaml;
 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace MoviesMobileApp
 {
 	public partial class App : PrismApplication

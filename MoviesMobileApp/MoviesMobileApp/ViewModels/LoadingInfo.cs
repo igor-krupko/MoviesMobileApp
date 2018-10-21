@@ -33,9 +33,12 @@
                 {
                     IsLoadingMore = false;
                 }
-                else if (IsRefreshing)
+                else
                 {
-                    IsRefreshing = false;
+                    if (IsRefreshing)
+                    {
+                        IsRefreshing = false;
+                    }
                 }
 
                 IsFirstLoading = false;
