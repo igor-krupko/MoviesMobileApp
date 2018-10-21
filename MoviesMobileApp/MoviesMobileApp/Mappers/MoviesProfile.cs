@@ -8,9 +8,10 @@ namespace MoviesMobileApp.Mappers
     {
         public MoviesProfile()
         {
-            CreateMap<MovieDto, MovieListItemViewModel>()
+            CreateMap<MovieDto, MovieViewModel>()
                 .ForMember(dest => dest.Genres, opts => opts.Ignore())
-                .ForMember(dest => dest.BaseImagePath, opts => opts.Ignore());
+                .ForMember(dest => dest.BaseImagePath, opts => opts.Ignore())
+                .ForMember(dest => dest.PosterSizes, opts => opts.Ignore());
         }
     }
 }

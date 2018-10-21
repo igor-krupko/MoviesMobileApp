@@ -6,15 +6,15 @@ namespace MoviesMobileApp.ViewModels
     {
         public const string SelectedMovieKey = "SelectedMovie";
 
-        public MovieListItemViewModel Movie { get; set; }
+        public MovieViewModel Movie { get; set; }
 
-        public override void OnNavigatedTo(NavigationParameters parameters)
+        public override void OnNavigatingTo(NavigationParameters parameters)
         {
-            base.OnNavigatedTo(parameters);
+            base.OnNavigatingTo(parameters);
 
             if (parameters.ContainsKey(SelectedMovieKey))
             {
-                Movie = (MovieListItemViewModel)parameters[SelectedMovieKey];
+                Movie = (MovieViewModel)parameters[SelectedMovieKey];
             }
         }
     }

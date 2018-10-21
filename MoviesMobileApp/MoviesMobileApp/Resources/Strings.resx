@@ -121,13 +121,13 @@
     <value>Enter movie name to search</value>
   </data>
   <data name="NoMoviesLabel" xml:space="preserve">
-    <value>No upcoming movies</value>
+    <value>No movies found.</value>
   </data>
   <data name="OverviewLabel" xml:space="preserve">
     <value>Overview</value>
   </data>
-  <data name="ReleaseDateLabelFormat" xml:space="preserve">
-    <value>Release date: {0:dd MMMM yyyy}</value>
+  <data name="ReleaseDateLabel" xml:space="preserve">
+    <value>Released:</value>
   </data>
   <data name="UpcomingMoviesPageTitle" xml:space="preserve">
     <value>Upcoming Movies</value>

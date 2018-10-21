@@ -6,10 +6,10 @@
              NavigationPage.HasNavigationBar="False"
              Style ="{StaticResource BasePageStyle}">
     <StackLayout Orientation="Vertical">
-        <SearchBar x:Name="SearchBar"
+        <SearchBar x:Name="SearchBarView"
                    Placeholder="{x:Static resources:Strings.MovieSearchPlaceholder}"
                    SearchCommand="{Binding SearchCommand}"
-                   SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
-        <pages:MoviesListLayout />
+                   SearchCommandParameter="{Binding Text, Source={x:Reference SearchBarView}}" />
+        <pages:MoviesListLayout VerticalOptions="FillAndExpand"/>
     </StackLayout>
 </ContentPage>

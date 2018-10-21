@@ -27,9 +27,9 @@ namespace MoviesMobileApp.ViewModels
         private bool canLoadMore = true;
 
         public LoadingInfo LoadingInfo { get; set; } = new LoadingInfo();
-        public ExtendedObservableCollection<MovieListItemViewModel> Items { get; set; }
+        public ExtendedObservableCollection<MovieViewModel> Items { get; set; }
         public DelegateCommand ReloadItemsCommand { get; }
-        public DelegateCommand<MovieListItemViewModel> OnItemTappedCommand { get; }
+        public DelegateCommand<MovieViewModel> OnItemTappedCommand { get; }
         public DelegateCommand LoadMoreItemsCommand { get; }
 
         protected BaseMoviesListPageViewModel(INavigationService navigationService,
@@ -41,11 +41,11 @@ namespace MoviesMobileApp.ViewModels
             this.configurationService = configurationService;
 
             ReloadItemsCommand = new DelegateCommand(ReloadItems);
-            OnItemTappedCommand = new DelegateCommand<MovieListItemViewModel>(OnItemTapped);
+            OnItemTappedCommand = new DelegateCommand<MovieViewModel>(OnItemTapped);
             LoadMoreItemsCommand = new DelegateCommand(LoadMoreItems);
         }
 
-        public async void OnItemTapped(MovieListItemViewModel item)
+        public async void OnItemTapped(MovieViewModel item)
         {
             await navigationService.NavigateAsync(nameof(MovieDetailsPage),
                 new NavigationParameters
@@ -61,11 +61,14 @@ namespace MoviesMobileApp.ViewModels
             itemsLoadingSubscription?.Dispose();
         }
 
-        public override void OnNavigatedTo(NavigationParameters parameters)
+        public override void OnNavigatingTo(NavigationParameters parameters)
         {
-            base.OnNavigatedTo(parameters);
+            base.OnNavigatingTo(parameters);
 
-            ReloadItems();
+            if (!IsNavigatedBack)
+            {
+                ReloadItems();
+            }
         }
 
         public void ReloadItems()
@@ -85,15 +88,11 @@ namespace MoviesMobileApp.ViewModels
 
             LoadingInfo.StartLoadingMore();
 
-            ++CurrentPageNumber;
+            CurrentPageNumber++;
             LoadItems(false);
         }
 
-        protected virtual void OnErrorLoadingItems(Exception e)
-        {
-            LoadingInfo.HasDataToShow = Items != null && Items.Any();
-            FinishLoading();
-        }
+        protected abstract IObservable<MoviesDto> GetMoviesObservable();
 
         private void LoadItems(bool reset)
         {
@@ -110,8 +109,6 @@ namespace MoviesMobileApp.ViewModels
                     OnErrorLoadingItems);
         }
 
-        protected abstract IObservable<MoviesDto> GetMoviesObservable();
-
         private void OnMoviesInfoLoaded(MoviesListPageData loadedResult, bool reset)
         {
             var movies = loadedResult.Movies?.ToList();
@@ -122,7 +119,7 @@ namespace MoviesMobileApp.ViewModels
 
                 if (reset || Items == null)
                 {
-                    Items = ObservableCollectionHelper.CreateFrom<MovieListItemViewModel>(movies, movie => PrepareMovieItemViewModel(loadedResult, movie));
+                    Items = ObservableCollectionHelper.CreateFrom<MovieViewModel>(movies, movie => PrepareMovieItemViewModel(loadedResult, movie));
                 }
                 else
                 {
@@ -135,20 +132,27 @@ namespace MoviesMobileApp.ViewModels
             LoadingInfo.HasDataToShow = Items != null && Items.Any();
         }
 
-        private void PrepareMovieItemViewModel(MoviesListPageData loadedResult, MovieListItemViewModel movie)
+        private void OnErrorLoadingItems(Exception e)
         {
-            SetGenres(loadedResult.Genres, movie);
-            SetBaseImagePath(loadedResult.ImagesConfiguration, movie);
+            LoadingInfo.HasDataToShow = Items != null && Items.Any();
+            FinishLoading();
         }
 
-        private void SetGenres(IEnumerable<GenreDto> genres, MovieListItemViewModel movie)
+        private void PrepareMovieItemViewModel(MoviesListPageData loadedResult, MovieViewModel movie)
+        {
+            SetGenres(loadedResult.Genres, movie);
+            SetImagesConfigs(loadedResult.ImagesConfiguration, movie);
+        }
+
+        private void SetGenres(IEnumerable<GenreDto> genres, MovieViewModel movie)
         {
             movie.Genres = string.Join(", ", movie.GenreIds.Select(id => genres.FirstOrDefault(genre => genre.Id == id)?.Name));
         }
 
-        private void SetBaseImagePath(ImagesConfigurationDto imagesConfiguration, MovieListItemViewModel movie)
+        private void SetImagesConfigs(ImagesConfigurationDto imagesConfiguration, MovieViewModel movie)
         {
-            movie.BaseImagePath = $"{imagesConfiguration.ImageBaseUrl}/{imagesConfiguration.PosterSizes.First()}";
+            movie.BaseImagePath = imagesConfiguration.ImageBaseUrl;
+            movie.PosterSizes = imagesConfiguration.PosterSizes;
         }
 
         private void FinishLoading()

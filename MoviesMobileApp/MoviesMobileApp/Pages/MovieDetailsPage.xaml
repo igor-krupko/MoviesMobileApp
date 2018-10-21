@@ -6,23 +6,39 @@
              Title ="{Binding Movie.Title}"
              Style ="{StaticResource BasePageStyle}">
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Spacing="10">
-            <StackLayout Orientation="Horizontal">
-                <forms:CachedImage Source="{Binding Movie.FullPosterPath}"
-                                   WidthRequest="80"
-                                   HeightRequest="120"
-                                   DownsampleToViewSize="True" />
-                <StackLayout Orientation="Vertical">
-                    <Label Text="{Binding Movie.Genres}"
+        <StackLayout Orientation="Vertical" 
+                     Style="{StaticResource StackLayoutBaseStyle}">
+            <StackLayout Orientation="Horizontal"
+                         Style="{StaticResource StackLayoutBaseStyle}">
+                <forms:CachedImage Source="{Binding Movie.MediumQualityPosterPath}"
+                                   Style="{StaticResource ImageMediumSizeStyle}" />
+
+                <StackLayout Orientation="Vertical"
+                             VerticalOptions="EndAndExpand"
+                             Style="{StaticResource StackLayoutBaseStyle}">
+                    <Label IsVisible="{Binding Movie.HasGenres}"
+                           Text="{Binding Movie.Genres}"
                            Style="{StaticResource ItalicLabelStyle}"/>
-                    <Label Text="{Binding Movie.ReleaseDate, StringFormat={x:Static resources:Strings.ReleaseDateLabelFormat}}"
-                           Style="{StaticResource LabelStyle}"/>
+
+                    <StackLayout Orientation="Horizontal"
+                                 IsVisible="{Binding Movie.HasReleaseDate}">
+                        <Label Text="{x:Static resources:Strings.ReleaseDateLabel}"
+                               Style="{StaticResource LabelStyle}"/>
+
+                        <Label Text="{Binding Movie.ReleaseDate, StringFormat='{0:dd MMMM yyyy}'}"
+                               Style="{StaticResource ColorLabelStyle}"/>
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
+
+            <BoxView HorizontalOptions="FillAndExpand"
+                     Style="{StaticResource LineStyle}" />
+
             <Label Text="{x:Static resources:Strings.OverviewLabel}"
                    Style="{StaticResource TitleLabelStyle}" />
+
             <Label Text="{Binding Movie.Overview}" 
-                   Style="{StaticResource LabelStyle}" />
+                   Style="{StaticResource ItalicLabelStyle}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

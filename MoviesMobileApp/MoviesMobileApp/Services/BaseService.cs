@@ -32,16 +32,6 @@ namespace MoviesMobileApp.Services
             return () => Execute(func, policy);
         }
 
-        protected Task<T> TaskWithDefaultPolicy<T>(Func<Task<T>> func)
-        {
-            return Execute(func, DefaultPolicy);
-        }
-
-        protected Task TaskWithDefaultPolicy(Func<Task> func)
-        {
-            return Execute(func, DefaultPolicy);
-        }
-
         protected async Task<T> Execute<T>(Func<Task<T>> func, Policy policy = null)
         {
             try
@@ -59,23 +49,6 @@ namespace MoviesMobileApp.Services
             }
         }
 
-        protected async Task Execute(Func<Task> func, Policy policy = null)
-        {
-            try
-            {
-                if (policy != null)
-                {
-                    await policy.ExecuteAsync(func);
-                }
-
-                await func();
-            }
-            catch (Exception e) when (IsNetworkException(e))
-            {
-                throw new NetworkProblemException(e);
-            }
-        }
-
         private static bool IsJavaUnknownHostException(Exception exception)
         {
             return exception?.GetType().ToString() == "Java.Net.UnknownHostException";
@@ -83,8 +56,8 @@ namespace MoviesMobileApp.Services
 
         private static bool IsCancelledWithoutCancellationRequest(Exception exception)
         {
-            var cancelledException = exception as OperationCanceledException;
-            return cancelledException != null && !cancelledException.CancellationToken.IsCancellationRequested;
+            return exception is OperationCanceledException cancelledException 
+                   && !cancelledException.CancellationToken.IsCancellationRequested;
         }
 
         private static bool IsNetworkException(Exception exception)

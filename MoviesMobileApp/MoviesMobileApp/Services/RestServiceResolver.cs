@@ -11,53 +11,27 @@ namespace MoviesMobileApp.Services
         private static readonly TimeSpan DefaultHttpTimeout = TimeSpan.FromSeconds(30);
         
         private readonly IConnectivity connectivity;
-
-        private RestServiceWrapper userInitiatedWrapper;
-        private RestServiceWrapper backgroundWrapper;
-        private RestServiceWrapper speculativeWrapper;
-
-        private HttpClient userInitiatedClient;
-        private HttpClient backgroundClient;
-        private HttpClient speculativeClient;
-
-        public RestServiceWrapper UserInitiated => GetServiceWrapper(ref userInitiatedWrapper, ref userInitiatedClient, new NativeMessageHandler());
-        public RestServiceWrapper Background => GetServiceWrapper(ref backgroundWrapper, ref backgroundClient, new NativeMessageHandler());
-        public RestServiceWrapper Speculative => GetServiceWrapper(ref speculativeWrapper, ref speculativeClient, new NativeMessageHandler());
+        private readonly RestServiceWrapper restServiceWrapper;
 
         public RestServiceResolver(IConnectivity connectivity)
         {
             this.connectivity = connectivity;
+
+            restServiceWrapper = GetServiceWrapper();
         }
 
-        public TApi For<TApi>(RequestPriority priority)
+        public TApi For<TApi>()
         {
-            switch (priority)
-            {
-                case RequestPriority.UserInitiated:
-                    return UserInitiated.For<TApi>();
-                case RequestPriority.Background:
-                    return Background.For<TApi>();
-                case RequestPriority.Speculative:
-                    return Speculative.For<TApi>();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
-            }
+            return restServiceWrapper.For<TApi>();
         }
 
-        private RestServiceWrapper GetServiceWrapper(ref RestServiceWrapper wrapper, ref HttpClient httpClient, HttpMessageHandler handler)
+        private RestServiceWrapper GetServiceWrapper()
         {
-            if (wrapper == null)
-            {
-                if (httpClient == null)
-                {
-                    httpClient = CreateHttpClient(handler);
-                }
-                wrapper = new RestServiceWrapper(httpClient);
-            }
-            return wrapper;
+            var client = CreateHttpClient(new NativeMessageHandler());
+            return new RestServiceWrapper(client);
         }
 
-        public HttpClient CreateHttpClient(HttpMessageHandler innerHandler)
+        private HttpClient CreateHttpClient(HttpMessageHandler innerHandler)
         {
             HttpMessageHandler handler = new ConnectivityCheckHandler(connectivity, innerHandler);
 

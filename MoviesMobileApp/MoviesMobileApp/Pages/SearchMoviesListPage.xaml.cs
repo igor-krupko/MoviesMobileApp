@@ -8,5 +8,10 @@ namespace MoviesMobileApp.Pages
 	    {
 		    InitializeComponent();
 	    }
+
+        protected override void OnAppearing()
+        {
+            SearchBarView.Focus();
+        }
     }
 }
