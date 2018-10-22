@@ -1,0 +1,77 @@
+﻿<AbsoluteLayout xmlns="http://xamarin.com/schemas/2014/forms" 
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:views="clr-namespace:MoviesMobileApp.Views;assembly=MoviesMobileApp"
+                xmlns:resources="clr-namespace:MoviesMobileApp.Resources;assembly=MoviesMobileApp"
+                xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                x:Class="MoviesMobileApp.Pages.MoviesListLayout">
+    <ActivityIndicator IsVisible="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
+                       IsRunning="{Binding LoadingInfo.IsLoadingIndicatorVisible}"
+                       AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                       AbsoluteLayout.LayoutFlags="PositionProportional" />
+
+    <ContentView IsVisible="{Binding LoadingInfo.IsNoDataVisible}"
+                 Padding="15"
+                 AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                 AbsoluteLayout.LayoutFlags="PositionProportional">
+        <Label Text="{x:Static resources:Strings.NoMoviesLabel}"
+               Style="{StaticResource LabelStyle}"/>
+    </ContentView>
+
+    <views:ExtendedListView AbsoluteLayout.LayoutBounds="0,0,1,1"
+                            AbsoluteLayout.LayoutFlags="All"
+                            IsVisible="{Binding LoadingInfo.IsDataVisible}"
+                            ItemsSource="{Binding Items}"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
+                            HasUnevenRows="True"
+                            ItemTappedCommand="{Binding OnItemTappedCommand}"
+                            LoadMoreCommand="{Binding LoadMoreItemsCommand}"
+                            IsPullToRefreshEnabled="True"
+                            RefreshCommand="{Binding ReloadItemsCommand}"
+                            IsRefreshing="{Binding LoadingInfo.IsRefreshing}" >
+        <views:ExtendedListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal"
+                                 Style="{StaticResource StackLayoutBaseStyle}"
+                                 Padding="0, 10, 0, 10">
+                        <forms:CachedImage HorizontalOptions="Center" 
+                                           VerticalOptions="Center"
+                                           Source="{Binding MediumQualityPosterPath}"
+                                           Style="{StaticResource ImageSmallSizeStyle}">
+                        </forms:CachedImage>
+
+                        <StackLayout Orientation="Vertical"
+                                     Style="{StaticResource StackLayoutBaseStyle}">
+                            <Label Text="{Binding Title}" 
+                                   Style="{StaticResource TitleLabelStyle}"/>
+
+                            <Label IsVisible="{Binding HasGenres}"
+                                   Text="{Binding Genres}" 
+                                   Style="{StaticResource ItalicLabelStyle}"/>
+
+                            <StackLayout Orientation="Horizontal"
+                                         IsVisible="{Binding HasReleaseDate}">
+                                <Label Text="{x:Static resources:Strings.ReleaseDateLabel}"
+                                       Style="{StaticResource LabelStyle}"/>
+
+                                <Label Text="{Binding ReleaseDate, StringFormat='{0:dd MMMM yyyy}'}"
+                                       Style="{StaticResource ColorLabelStyle}"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </views:ExtendedListView.ItemTemplate>
+    </views:ExtendedListView>
+
+    <ContentView Padding="15"
+                 AbsoluteLayout.LayoutBounds="0.5,1,1,-1"
+                 AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
+                 IsVisible="{Binding LoadingInfo.IsLoadingMore}"
+                 BackgroundColor="Transparent">
+        <ActivityIndicator IsRunning="True" 
+                           IsVisible="True" 
+                           HorizontalOptions="FillAndExpand" />
+    </ContentView>
+</AbsoluteLayout>

@@ -1,0 +1,70 @@
+﻿<dryioc:PrismApplication xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dryioc="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="MoviesMobileApp.App">
+    <dryioc:PrismApplication.Resources>
+        <ResourceDictionary>
+            <!--  Text Sizes  -->
+            <x:Double x:Key="DefaultTextFontSize">14</x:Double>
+            <x:Double x:Key="TitleTextFontSize">16</x:Double>
+
+            <!--  Colors  -->
+            <Color x:Key="DefaultTextColor">DimGray</Color>
+            <Color x:Key="AlternativeTextColor">Gray</Color>
+            <Color x:Key="TitleTextColor">Black</Color>
+            <Color x:Key="ColoredTextColor">ForestGreen</Color>
+            <Color x:Key="PageBackgroundColor">White</Color>
+            <Color x:Key="LineColor">Gray</Color>
+
+            <!-- Styles -->
+            <Style x:Key="BasePageStyle" TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="{StaticResource PageBackgroundColor}" />
+                <Setter Property="Padding" Value="15" />
+            </Style>
+
+            <Style x:Key="BaseLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{StaticResource DefaultTextFontSize}" />
+            </Style>
+            <Style x:Key="LabelStyle" BasedOn="{StaticResource BaseLabelStyle}" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource DefaultTextColor}" />
+            </Style>
+            <Style x:Key="ItalicLabelStyle" BasedOn="{StaticResource BaseLabelStyle}" TargetType="Label">
+                <Setter Property="FontAttributes" Value="Italic" />
+                <Setter Property="TextColor" Value="{StaticResource AlternativeTextColor}" />
+            </Style>
+            <Style x:Key="ColorLabelStyle" BasedOn="{StaticResource BaseLabelStyle}" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource ColoredTextColor}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+            <Style x:Key="TitleLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="{StaticResource TitleTextFontSize}" />
+                <Setter Property="TextColor" Value="{StaticResource TitleTextColor}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style x:Key="LineStyle" TargetType="BoxView">
+                <Setter Property="HeightRequest" Value="1" />
+                <Setter Property="BackgroundColor" Value="{StaticResource LineColor}" />
+            </Style>
+
+            <Style x:Key="ImageStyle" TargetType="forms:CachedImage">
+                <Setter Property="DownsampleToViewSize" Value="True" />
+                <Setter Property="ErrorPlaceholder" Value="no_image_placeholder.png" />
+                <Setter Property="LoadingPlaceholder" Value="loading.gif" />
+            </Style>
+            <Style x:Key="ImageSmallSizeStyle" BasedOn="{StaticResource ImageStyle}" TargetType="forms:CachedImage">
+                <Setter Property="WidthRequest" Value="60" />
+                <Setter Property="HeightRequest" Value="90" />
+            </Style>
+            <Style x:Key="ImageMediumSizeStyle" BasedOn="{StaticResource ImageStyle}" TargetType="forms:CachedImage">
+                <Setter Property="WidthRequest" Value="160" />
+                <Setter Property="HeightRequest" Value="240" />
+            </Style>
+
+            <Style x:Key="StackLayoutBaseStyle" TargetType="StackLayout">
+                <Setter Property="Spacing" Value="10" />
+            </Style>
+        </ResourceDictionary>
+    </dryioc:PrismApplication.Resources>
+</dryioc:PrismApplication>

@@ -1,0 +1,13 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:resources="clr-namespace:MoviesMobileApp.Resources;assembly=MoviesMobileApp"
+             xmlns:pages="clr-namespace:MoviesMobileApp.Pages;assembly=MoviesMobileApp"
+             x:Class="MoviesMobileApp.Pages.MoviesListPage"
+             Title="{x:Static resources:Strings.UpcomingMoviesPageTitle}"
+             Style="{StaticResource BasePageStyle}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="ic_search" 
+                     Command="{Binding OpenSearchCommand}" />
+    </ContentPage.ToolbarItems>
+    <pages:MoviesListLayout />
+</ContentPage>
