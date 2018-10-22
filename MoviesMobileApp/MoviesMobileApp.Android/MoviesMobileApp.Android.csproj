@@ -62,9 +62,6 @@
     <PackageReference Include="AutoMapper">
       <Version>7.0.1</Version>
     </PackageReference>
-    <PackageReference Include="Fody">
-      <Version>3.2.9</Version>
-    </PackageReference>
     <PackageReference Include="modernhttpclient">
       <Version>2.4.2</Version>
     </PackageReference>
@@ -73,9 +70,6 @@
     </PackageReference>
     <PackageReference Include="Prism.DryIoc.Forms">
       <Version>7.0.0.396</Version>
-    </PackageReference>
-    <PackageReference Include="PropertyChanged.Fody">
-      <Version>2.5.13</Version>
     </PackageReference>
     <PackageReference Include="System.Reactive.Linq">
       <Version>4.0.0</Version>
