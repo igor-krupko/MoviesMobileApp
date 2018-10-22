@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using MoviesMobileApp.Api.Configuration;
 using MoviesMobileApp.Api.Genres;
@@ -115,18 +116,20 @@ namespace MoviesMobileApp.ViewModels
 
             if (movies != null)
             {
-                canLoadMore = loadedResult.TotalPagesCount != CurrentPageNumber;
-
-                if (reset || Items == null)
+                using (Disposable.Create(FinishLoading))
                 {
-                    Items = ObservableCollectionHelper.CreateFrom<MovieViewModel>(movies, movie => PrepareMovieItemViewModel(loadedResult, movie));
-                }
-                else
-                {
-                    Items.UpdateFrom(movies, movie => PrepareMovieItemViewModel(loadedResult, movie));
-                }
+                    canLoadMore = loadedResult.TotalPagesCount != CurrentPageNumber;
 
-                FinishLoading();
+                    if (reset || Items == null)
+                    {
+                        Items = ObservableCollectionHelper.CreateFrom<MovieViewModel>(movies,
+                            movie => PrepareMovieItemViewModel(loadedResult, movie));
+                    }
+                    else
+                    {
+                        Items.UpdateFrom(movies, movie => PrepareMovieItemViewModel(loadedResult, movie));
+                    }
+                }
             }
 
             LoadingInfo.HasDataToShow = Items != null && Items.Any();
